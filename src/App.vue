@@ -1,41 +1,83 @@
 <template>
-  <section class="catalog">
-    <ProductList :products="products" />
+  <main class="content container">
+    <div class="content__top content__top--catalog">
+      <h1 class="content__title">Каталог</h1>
+      <span class="content__info"> 152 товара </span>
+    </div>
 
-    <BasePagination
-      :modalValue="page"
-      @update:modalValue="page = $event"
-      :count="countProducts"
-      :perPage="productsPerPage"
-    />
-  </section>
+    <div class="content__catalog">
+      <ProductFilter
+        v-model:price-from="filterPriceFrom"
+        v-model:price-to="filterPriceTo"
+        v-model:category-id="filterCategoryId"
+      />
+
+      <section class="catalog">
+        <ProductList :products="products" />
+
+        <BasePagination
+          :modalValue="page"
+          @update:modalValue="page = $event"
+          :count="countProducts"
+          :perPage="productsPerPage"
+        />
+      </section>
+    </div>
+  </main>
 </template>
 
 <script>
 import products from "./data/products.js";
 import ProductList from "./components/ProductList.vue";
 import BasePagination from "./components/base/BasePagination.vue";
+import ProductFilter from "./components/ProductFilter.vue";
 
 export default {
   components: {
     ProductList,
     BasePagination,
+    ProductFilter,
   },
   name: "App",
   data() {
     return {
       page: 1,
       productsPerPage: 3,
+      filterPriceFrom: 0,
+      filterPriceTo: 0,
+      filterCategoryId: 0,
     };
   },
   computed: {
     products() {
       const offset = (this.page - 1) * this.productsPerPage;
 
-      return products.slice(offset, offset + this.productsPerPage);
+      return this.filteredProducts.slice(offset, offset + this.productsPerPage);
     },
     countProducts() {
-      return products.length;
+      return this.filteredProducts.length;
+    },
+    filteredProducts() {
+      let filteredProducts = products;
+
+      if (this.filterPriceFrom > 0) {
+        filteredProducts = filteredProducts.filter(
+          (product) => product.price >= this.filterPriceFrom
+        );
+      }
+
+      if (this.filterPriceTo > 0) {
+        filteredProducts = filteredProducts.filter(
+          (product) => product.price <= this.filterPriceTo
+        );
+      }
+
+      if (this.filterCategoryId) {
+        filteredProducts = filteredProducts.filter(
+          (product) => product.categoryId === this.filterCategoryId
+        );
+      }
+      return filteredProducts;
     },
   },
 };
