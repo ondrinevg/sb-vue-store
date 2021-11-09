@@ -32,6 +32,12 @@ import ProductList from "./components/ProductList.vue";
 import BasePagination from "./components/base/BasePagination.vue";
 import ProductFilter from "./components/ProductFilter.vue";
 
+import exportAlertFunction from "./exportImport/exportAlertFunction";
+import { variableOne, variableTwo } from "./exportImport/exportVariables";
+
+exportAlertFunction(variableOne);
+exportAlertFunction(variableTwo);
+
 export default {
   components: {
     ProductList,
