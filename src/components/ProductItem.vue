@@ -3,7 +3,7 @@
     <a
       class="catalog__pic"
       href="#"
-      @click.prevent="$emit('goToPage', 'product', { id: product.id })"
+      @click.prevent="goToPage('product', { id: product.id })"
     >
       <img :src="product.image" :alt="product.title" />
     </a>
@@ -12,7 +12,7 @@
       <a href="#">{{ product.title }}</a>
     </h3>
 
-    <span class="catalog__price"> {{ product.price }} ₽ </span>
+    <span class="catalog__price"> {{ formatPrice }} ₽ </span>
 
     <ul class="colors colors--black">
       <li class="colors__item" v-for="color in product.colors" :key="color">
@@ -32,12 +32,23 @@
 </template>
 
 <script>
+import goToPage from "@/helpers/goToPage";
+import numberFormat from "@/helpers/numberFormat";
+
 export default {
   name: "ProductItem",
   data() {
     return {
       currentColor: this.product.colors[0],
     };
+  },
+  methods: {
+    goToPage,
+  },
+  computed: {
+    formatPrice() {
+      return numberFormat(this.product.price);
+    },
   },
   props: {
     product: Object,
