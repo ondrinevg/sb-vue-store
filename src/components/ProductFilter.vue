@@ -99,7 +99,7 @@ export default {
     return {
       currentPriceFrom: 0,
       currentPriceTo: 0,
-      currentCategoryId: 0,
+      currentCategoryId: this.categoryId || 0,
       currentColor: "",
     };
   },

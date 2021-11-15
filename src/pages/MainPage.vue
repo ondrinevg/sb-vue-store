@@ -14,12 +14,7 @@
       />
 
       <section class="catalog">
-        <ProductList
-          :products="products"
-          @goToPage="
-            (pageName, PageParams) => $emit('goToPage', pageName, pageParams)
-          "
-        />
+        <ProductList :products="products" />
 
         <BasePagination
           :modalValue="page"
@@ -39,6 +34,9 @@ import BasePagination from "@/components/base/BasePagination.vue";
 import ProductFilter from "@/components/ProductFilter.vue";
 
 export default {
+  props: {
+    pageParams: Object,
+  },
   components: {
     ProductList,
     BasePagination,
@@ -51,7 +49,7 @@ export default {
       productsPerPage: 3,
       filterPriceFrom: 0,
       filterPriceTo: 0,
-      filterCategoryId: 0,
+      filterCategoryId: this.pageParams.categoryId || 0,
       filterColor: "",
     };
   },
